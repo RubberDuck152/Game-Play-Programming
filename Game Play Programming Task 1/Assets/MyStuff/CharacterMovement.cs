@@ -30,6 +30,8 @@ public class CharacterMovement : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
+        bool jump = Input.GetButtonUp("Jump");
+
         Vector3 direction = new Vector3(horizontal, 0.0f, vertical).normalized;
 
         if (direction.magnitude >= 0.1f)
@@ -45,6 +47,13 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             anim.SetBool(hash.movingBool, false);
+        }
+
+
+        if (jump)
+        {
+            anim.SetBool(hash.jumpBool, true);
+            anim.SetBool(hash.landingBool, true);
         }
     }
 }

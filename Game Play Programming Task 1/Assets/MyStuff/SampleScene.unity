@@ -235,7 +235,7 @@ MonoBehaviour:
   sneakBool: 0
   jumpBool: 0
   sprintBool: 0
-  backwardsBool: 0
+  landingBool: 0
   speedFloat: 0
   movingBool: 0
 --- !u!1 &551550286

@@ -7,15 +7,15 @@ public class Hashing : MonoBehaviour
     public int sneakBool;
     public int jumpBool;
     public int sprintBool;
-    public int backwardsBool;
+    public int landingBool;
     public int speedFloat;
     public int movingBool;
 
     private void Awake()
     {
         movingBool = Animator.StringToHash("Moving");
-        jumpBool = Animator.StringToHash("Jumping");
-        backwardsBool = Animator.StringToHash("Velocity X");
+        jumpBool = Animator.StringToHash("Jump");
+        landingBool = Animator.StringToHash("Landing");
         speedFloat = Animator.StringToHash("AnimationSpeed");
     }
 }
