@@ -99,4 +99,17 @@ public class CharacterMovement : MonoBehaviour
         // Maintains the velocity whilst jumping however unable to change direction
         controller.Move(movementVector);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "SpeedBoost")
+        {
+            playerSpeed = 12.0f;
+        }
+
+        if (other.tag == "DoubleJump")
+        {
+            canDoubleJump = true;
+        }
+    }
 }
