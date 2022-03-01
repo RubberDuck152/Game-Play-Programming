@@ -12,6 +12,7 @@ public class CharacterMovement : MonoBehaviour
     private Animator anim;
     private Hashing hash;
 
+    public bool armed = false;
     private bool canDoubleJump = false;
     private bool groundedPlayer;
 
@@ -23,6 +24,8 @@ public class CharacterMovement : MonoBehaviour
 
     private float gravityValue = -9.81f;
     private float timer = 0.0f;
+
+    float turnSmoothVelocity;
 
     private Vector3 movementVector;
     private Vector3 playerVelocity;
@@ -37,6 +40,10 @@ public class CharacterMovement : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown("f"))
+        {
+            armed = !armed;
+        }
         // Checks to see if the player is grounded
         if (controller.isGrounded)
         {
@@ -54,44 +61,107 @@ public class CharacterMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         // Creates a new Vector3 to move the player
-        Vector3 move = new Vector3(horizontal, 0, vertical);
-        controller.Move(move * Time.deltaTime * playerSpeed);
+        Vector3 direction = new Vector3(horizontal, 0.0f, vertical).normalized;
 
-        if (move != Vector3.zero)
+        if (armed == false)
         {
-            gameObject.transform.forward = move;
-            anim?.SetBool(hash.movingBool, true);
-        }
-        else
-        {
-            anim?.SetBool(hash.movingBool, false);
-        }
+            anim?.SetBool(hash.armedBool, false);
+            if (direction.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-        // Jumping for the Player Character
-        if (Input.GetButtonDown("Jump") && groundedPlayer || canDoubleJump && Input.GetButtonDown("Jump"))
-        {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-            anim?.SetBool(hash.jumpBool, true);
-            anim?.SetBool(hash.fallingBool, true);
-            anim?.SetBool(hash.landingBool, true);
+                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                controller.Move(moveDir.normalized * playerSpeed * Time.deltaTime);
+                anim?.SetBool(hash.movingBool, true);
+            }
+            else
+            {
+                anim?.SetBool(hash.movingBool, false);
+            }
 
-            groundedPlayer = false;
-
-            if (Input.GetButtonDown("Jump") && canDoubleJump && groundedPlayer == false)
+            // Jumping for the Player Character
+            if (Input.GetButtonDown("Jump") && groundedPlayer || canDoubleJump && Input.GetButtonDown("Jump"))
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 anim?.SetBool(hash.jumpBool, true);
                 anim?.SetBool(hash.fallingBool, true);
-                if (groundedPlayer)
+                anim?.SetBool(hash.landingBool, true);
+
+                groundedPlayer = false;
+
+                if (Input.GetButtonDown("Jump") && canDoubleJump && groundedPlayer == false)
                 {
-                    anim?.SetBool(hash.landingBool, true);
+                    playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                    anim?.SetBool(hash.jumpBool, true);
+                    anim?.SetBool(hash.fallingBool, true);
+                    if (groundedPlayer)
+                    {
+                        anim?.SetBool(hash.landingBool, true);
+                    }
+                    canDoubleJump = false;
                 }
-                canDoubleJump = false;
+            }
+            else
+            {
+                anim?.SetBool(hash.jumpBool, false);
             }
         }
         else
         {
-            anim?.SetBool(hash.jumpBool, false);
+            anim?.SetBool(hash.armedBool, true);
+
+            if (Input.GetButtonDown("Main Attack"))
+            {
+                anim?.SetBool(hash.attack1Bool, true);
+            }
+            else
+            {
+                anim?.SetBool(hash.attack1Bool, false);
+            }
+
+            if (direction.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                controller.Move(moveDir.normalized * playerSpeed * Time.deltaTime);
+                anim?.SetBool(hash.movingBool, true);
+            }
+            else
+            {
+                anim?.SetBool(hash.movingBool, false);
+            }
+
+            // Jumping for the Player Character
+            if (Input.GetButtonDown("Jump") && groundedPlayer || canDoubleJump && Input.GetButtonDown("Jump"))
+            {
+                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                anim?.SetBool(hash.jumpBool, true);
+                anim?.SetBool(hash.fallingBool, true);
+                anim?.SetBool(hash.landingBool, true);
+
+                groundedPlayer = false;
+
+                if (Input.GetButtonDown("Jump") && canDoubleJump && groundedPlayer == false)
+                {
+                    playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                    anim?.SetBool(hash.jumpBool, true);
+                    anim?.SetBool(hash.fallingBool, true);
+                    if (groundedPlayer)
+                    {
+                        anim?.SetBool(hash.landingBool, true);
+                    }
+                    canDoubleJump = false;
+                }
+            }
+            else
+            {
+                anim?.SetBool(hash.jumpBool, false);
+            }
         }
 
         playerVelocity.y += gravityValue * Time.deltaTime;
