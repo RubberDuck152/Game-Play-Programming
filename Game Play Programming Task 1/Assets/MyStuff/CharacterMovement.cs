@@ -7,17 +7,19 @@ public class CharacterMovement : MonoBehaviour
 {
     public CharacterController controller;
 
+    public GameObject obj;
+
     public Transform cam;
 
     private Animator anim;
     private Hashing hash;
 
     public bool armed = false;
-    private bool canDoubleJump = false;
+    private bool canDoubleJump = true;
     private bool groundedPlayer;
 
     public float playerSpeed = 2.0f;
-    public float jumpHeight = 1.0f;
+    public float jumpHeight = 2.0f;
     public float turnSmoothTime = 0.1f;
     public float speedDampTime = 0.01f;
     public float jumpForce;
@@ -40,7 +42,7 @@ public class CharacterMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("f"))
+        if (Input.GetButtonDown("Draw Weapon"))
         {
             armed = !armed;
         }
@@ -59,12 +61,14 @@ public class CharacterMovement : MonoBehaviour
         // Gets all the Input values from the keyboard / controller
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        bool jump = Input.GetButtonDown("Jump");
 
         // Creates a new Vector3 to move the player
         Vector3 direction = new Vector3(horizontal, 0.0f, vertical).normalized;
 
         if (armed == false)
         {
+            obj.SetActive(false);
             anim?.SetBool(hash.armedBool, false);
             if (direction.magnitude >= 0.1f)
             {
@@ -82,34 +86,39 @@ public class CharacterMovement : MonoBehaviour
             }
 
             // Jumping for the Player Character
-            if (Input.GetButtonDown("Jump") && groundedPlayer || canDoubleJump && Input.GetButtonDown("Jump"))
+            if (jump && groundedPlayer)
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 anim?.SetBool(hash.jumpBool, true);
                 anim?.SetBool(hash.fallingBool, true);
-                anim?.SetBool(hash.landingBool, true);
+                if (groundedPlayer)
+                {
+                    anim?.SetBool(hash.landingBool, true);
+                }
 
                 groundedPlayer = false;
-
-                if (Input.GetButtonDown("Jump") && canDoubleJump && groundedPlayer == false)
+            }
+            else if (jump && canDoubleJump && groundedPlayer == false)
+            {
+                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                anim?.SetBool(hash.jumpBool, false);
+                anim?.SetBool(hash.rollBool, true);
+                anim?.SetBool(hash.fallingBool, true);
+                if (groundedPlayer)
                 {
-                    playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-                    anim?.SetBool(hash.jumpBool, true);
-                    anim?.SetBool(hash.fallingBool, true);
-                    if (groundedPlayer)
-                    {
-                        anim?.SetBool(hash.landingBool, true);
-                    }
-                    canDoubleJump = false;
+                    anim?.SetBool(hash.landingBool, true);
                 }
+                canDoubleJump = false;
             }
             else
             {
+                anim?.SetBool(hash.rollBool, false);
                 anim?.SetBool(hash.jumpBool, false);
             }
         }
         else
         {
+            obj.SetActive(true);
             anim?.SetBool(hash.armedBool, true);
 
             if (Input.GetButtonDown("Main Attack"))
@@ -137,29 +146,33 @@ public class CharacterMovement : MonoBehaviour
             }
 
             // Jumping for the Player Character
-            if (Input.GetButtonDown("Jump") && groundedPlayer || canDoubleJump && Input.GetButtonDown("Jump"))
+            if (jump && groundedPlayer)
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 anim?.SetBool(hash.jumpBool, true);
                 anim?.SetBool(hash.fallingBool, true);
-                anim?.SetBool(hash.landingBool, true);
+                if (groundedPlayer)
+                {
+                    anim?.SetBool(hash.landingBool, true);
+                }
 
                 groundedPlayer = false;
-
-                if (Input.GetButtonDown("Jump") && canDoubleJump && groundedPlayer == false)
+            }
+            else if (jump && canDoubleJump && groundedPlayer == false)
+            {
+                playerVelocity.y += Mathf.Sqrt(jumpHeight * -5.0f * gravityValue);
+                anim?.SetBool(hash.jumpBool, false);
+                anim?.SetBool(hash.rollBool, true);
+                anim?.SetBool(hash.fallingBool, true);
+                if (groundedPlayer)
                 {
-                    playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-                    anim?.SetBool(hash.jumpBool, true);
-                    anim?.SetBool(hash.fallingBool, true);
-                    if (groundedPlayer)
-                    {
-                        anim?.SetBool(hash.landingBool, true);
-                    }
-                    canDoubleJump = false;
+                    anim?.SetBool(hash.landingBool, true);
                 }
+                canDoubleJump = false;
             }
             else
             {
+                anim?.SetBool(hash.rollBool, false);
                 anim?.SetBool(hash.jumpBool, false);
             }
         }
