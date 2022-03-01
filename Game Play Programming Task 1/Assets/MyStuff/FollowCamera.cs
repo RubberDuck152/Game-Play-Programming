@@ -41,13 +41,10 @@ public class FollowCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (Input.GetMouseButton(1) || Input.GetButtonDown("MoveCam"))
+        if (Input.GetMouseButton(1))
         {/*0 mouse btn izq, 1 mouse btn der*/
             x += Input.GetAxis("Mouse X") * mouseXSpeedMod;
             y += Input.GetAxis("Mouse Y") * mouseYSpeedMod;
-
-            x += Input.GetAxis("Right Stick X") * mouseXSpeedMod;
-            y += Input.GetAxis("Right Stick Y") * mouseYSpeedMod;
         }
 
         y = ClampAngle(y, -15, 25);
