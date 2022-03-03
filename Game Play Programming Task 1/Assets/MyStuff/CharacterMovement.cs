@@ -8,6 +8,8 @@ public class CharacterMovement : MonoBehaviour
     public CharacterController controller;
 
     public GameObject obj;
+    public GameObject speedParticle;
+    public GameObject jumpParticle;
 
     public Transform cam;
 
@@ -15,7 +17,7 @@ public class CharacterMovement : MonoBehaviour
     private Hashing hash;
 
     public bool armed = false;
-    private bool canDoubleJump = true;
+    private bool canDoubleJump = false;
     private bool groundedPlayer;
 
     public float playerSpeed = 2.0f;
@@ -96,7 +98,7 @@ public class CharacterMovement : MonoBehaviour
         }
         else if (jump && canDoubleJump && groundedPlayer == false)
         {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -6.0f * gravityValue);
             anim?.SetBool(hash.jumpBool, false);
             anim?.SetBool(hash.rollBool, true);
             anim?.SetBool(hash.fallingBool, true);
@@ -105,6 +107,7 @@ public class CharacterMovement : MonoBehaviour
                 anim?.SetBool(hash.landingBool, true);
             }
             canDoubleJump = false;
+            jumpParticle.SetActive(false);
         }
         else
         {
@@ -136,5 +139,20 @@ public class CharacterMovement : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
         // Maintains the velocity whilst jumping however unable to change direction
         controller.Move(movementVector);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "SpeedBoost")
+        {
+            speedParticle.SetActive(true);
+            playerSpeed = 12.0f;
+        }
+
+        if (other.tag == "DoubleJump")
+        {
+            jumpParticle.SetActive(true);
+            canDoubleJump = true;
+        }
     }
 }
