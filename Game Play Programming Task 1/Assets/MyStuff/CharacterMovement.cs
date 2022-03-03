@@ -66,55 +66,56 @@ public class CharacterMovement : MonoBehaviour
         // Creates a new Vector3 to move the player
         Vector3 direction = new Vector3(horizontal, 0.0f, vertical).normalized;
 
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            controller.Move(moveDir.normalized * playerSpeed * Time.deltaTime);
+            anim?.SetBool(hash.movingBool, true);
+        }
+        else
+        {
+            anim?.SetBool(hash.movingBool, false);
+        }
+
+        // Jumping for the Player Character
+        if (jump && groundedPlayer)
+        {
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            anim?.SetBool(hash.jumpBool, true);
+            anim?.SetBool(hash.fallingBool, true);
+            if (groundedPlayer)
+            {
+                anim?.SetBool(hash.landingBool, true);
+            }
+
+            groundedPlayer = false;
+        }
+        else if (jump && canDoubleJump && groundedPlayer == false)
+        {
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            anim?.SetBool(hash.jumpBool, false);
+            anim?.SetBool(hash.rollBool, true);
+            anim?.SetBool(hash.fallingBool, true);
+            if (groundedPlayer)
+            {
+                anim?.SetBool(hash.landingBool, true);
+            }
+            canDoubleJump = false;
+        }
+        else
+        {
+            anim?.SetBool(hash.rollBool, false);
+            anim?.SetBool(hash.jumpBool, false);
+        }
+
         if (armed == false)
         {
             obj.SetActive(false);
             anim?.SetBool(hash.armedBool, false);
-            if (direction.magnitude >= 0.1f)
-            {
-                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                controller.Move(moveDir.normalized * playerSpeed * Time.deltaTime);
-                anim?.SetBool(hash.movingBool, true);
-            }
-            else
-            {
-                anim?.SetBool(hash.movingBool, false);
-            }
-
-            // Jumping for the Player Character
-            if (jump && groundedPlayer)
-            {
-                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-                anim?.SetBool(hash.jumpBool, true);
-                anim?.SetBool(hash.fallingBool, true);
-                if (groundedPlayer)
-                {
-                    anim?.SetBool(hash.landingBool, true);
-                }
-
-                groundedPlayer = false;
-            }
-            else if (jump && canDoubleJump && groundedPlayer == false)
-            {
-                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-                anim?.SetBool(hash.jumpBool, false);
-                anim?.SetBool(hash.rollBool, true);
-                anim?.SetBool(hash.fallingBool, true);
-                if (groundedPlayer)
-                {
-                    anim?.SetBool(hash.landingBool, true);
-                }
-                canDoubleJump = false;
-            }
-            else
-            {
-                anim?.SetBool(hash.rollBool, false);
-                anim?.SetBool(hash.jumpBool, false);
-            }
         }
         else
         {
@@ -129,70 +130,11 @@ public class CharacterMovement : MonoBehaviour
             {
                 anim?.SetBool(hash.attack1Bool, false);
             }
-
-            if (direction.magnitude >= 0.1f)
-            {
-                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                controller.Move(moveDir.normalized * playerSpeed * Time.deltaTime);
-                anim?.SetBool(hash.movingBool, true);
-            }
-            else
-            {
-                anim?.SetBool(hash.movingBool, false);
-            }
-
-            // Jumping for the Player Character
-            if (jump && groundedPlayer)
-            {
-                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-                anim?.SetBool(hash.jumpBool, true);
-                anim?.SetBool(hash.fallingBool, true);
-                if (groundedPlayer)
-                {
-                    anim?.SetBool(hash.landingBool, true);
-                }
-
-                groundedPlayer = false;
-            }
-            else if (jump && canDoubleJump && groundedPlayer == false)
-            {
-                playerVelocity.y += Mathf.Sqrt(jumpHeight * -5.0f * gravityValue);
-                anim?.SetBool(hash.jumpBool, false);
-                anim?.SetBool(hash.rollBool, true);
-                anim?.SetBool(hash.fallingBool, true);
-                if (groundedPlayer)
-                {
-                    anim?.SetBool(hash.landingBool, true);
-                }
-                canDoubleJump = false;
-            }
-            else
-            {
-                anim?.SetBool(hash.rollBool, false);
-                anim?.SetBool(hash.jumpBool, false);
-            }
         }
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
         // Maintains the velocity whilst jumping however unable to change direction
         controller.Move(movementVector);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "SpeedBoost")
-        {
-            playerSpeed = 12.0f;
-        }
-
-        if (other.tag == "DoubleJump")
-        {
-            canDoubleJump = true;
-        }
     }
 }
