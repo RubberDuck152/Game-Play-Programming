@@ -53,9 +53,9 @@ public class FollowCamera : MonoBehaviour
             y += Input.GetAxis("MoveCamY");
         }
 
-        Debug.Log("X: " + Input.GetAxis("MoveCamX") + "Y: " + Input.GetAxis("MoveCamY"));
+        //Debug.Log("X: " + Input.GetAxis("MoveCamX") + "Y: " + Input.GetAxis("MoveCamY"));
 
-        y = ClampAngle(y, -35, 45);
+        y = ClampAngle(y, -15, 45);
         Quaternion rotation = Quaternion.Euler(y, x, 0);
 
         desireDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * ZoomRate * Mathf.Abs(desireDistance);
