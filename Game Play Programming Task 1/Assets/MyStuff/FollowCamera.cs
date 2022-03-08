@@ -47,7 +47,15 @@ public class FollowCamera : MonoBehaviour
             y += Input.GetAxis("Mouse Y") * mouseYSpeedMod;
         }
 
-        y = ClampAngle(y, -15, 25);
+        if(Input.GetAxis("MoveCamX") >= 0.1 || Input.GetAxis("MoveCamX") <= -0.1 || Input.GetAxis("MoveCamY") >= 0.1 || Input.GetAxis("MoveCamY") <= -0.1)
+        {
+            x += Input.GetAxis("MoveCamX");
+            y += Input.GetAxis("MoveCamY");
+        }
+
+        Debug.Log("X: " + Input.GetAxis("MoveCamX") + "Y: " + Input.GetAxis("MoveCamY"));
+
+        y = ClampAngle(y, -35, 45);
         Quaternion rotation = Quaternion.Euler(y, x, 0);
 
         desireDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * ZoomRate * Mathf.Abs(desireDistance);
@@ -82,7 +90,7 @@ public class FollowCamera : MonoBehaviour
 
         float cameraX = transform.rotation.x;
         //checks if right mouse button is pushed
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) || Input.GetAxis("MoveCamX") >= 0.2 || Input.GetAxis("MoveCamX") <= -0.2 || Input.GetAxis("MoveCamY") >= 0.2 || Input.GetAxis("MoveCamY") <= -0.2)
         {
             //sets CHARACTERS x rotation to match cameras x rotation
             CameraTarget.eulerAngles = new Vector3(cameraX, transform.eulerAngles.y, transform.eulerAngles.z);

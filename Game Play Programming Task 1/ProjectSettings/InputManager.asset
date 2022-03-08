@@ -294,36 +294,36 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: MoveCam
+    m_Name: MoveCamX
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 4
+    positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
+    dead: 0.01
+    sensitivity: 5
     snap: 0
     invert: 0
-    type: 0
-    axis: 0
+    type: 2
+    axis: 3
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Cancel
+    m_Name: MoveCamY
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: escape
+    positiveButton: 
     altNegativeButton: 
-    altPositiveButton: joystick button 1
+    altPositiveButton: 
     gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
+    dead: 0.01
+    sensitivity: 5
     snap: 0
     invert: 0
-    type: 0
-    axis: 0
+    type: 2
+    axis: 4
     joyNum: 0
   - serializedVersion: 3
     m_Name: Cancel
