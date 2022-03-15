@@ -813,10 +813,9 @@ GameObject:
   - component: {fileID: 630082672}
   - component: {fileID: 630082671}
   - component: {fileID: 630082670}
-  - component: {fileID: 630082669}
   m_Layer: 0
   m_Name: Cylinder (1)
-  m_TagString: Untagged
+  m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -835,21 +834,6 @@ Transform:
   m_Father: {fileID: 675601240}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &630082669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 630082667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848be27bf6900724a90d26a36b82176d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 963194227}
-  player: {fileID: 1924656406}
-  target: {fileID: 675601240}
 --- !u!136 &630082670
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11593,3 +11577,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400050, guid: e57e9b8cd5e115f4f8d7736473e5c7fd, type: 3}
   m_PrefabInstance: {fileID: 1066844637}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1924656411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924656406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848be27bf6900724a90d26a36b82176d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 963194227}
+  player: {fileID: 1924656410}
+  cameraObj: {fileID: 963194225}
+  target: {fileID: 675601240}

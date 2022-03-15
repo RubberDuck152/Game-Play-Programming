@@ -5,15 +5,17 @@ using UnityEngine;
 public class TargetAcquired : MonoBehaviour
 {
     public Camera mainCamera;
-    public GameObject player;
+    public Transform player;
+    public GameObject cameraObj;
     public Transform target;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Target")
         {
             mainCamera.transform.parent = player.transform;
             mainCamera.transform.LookAt(target);
-            (player.GetComponent("FollowCamera") as MonoBehaviour).enabled = false;
+            cameraObj.GetComponent<FollowCamera>().CameraTarget = target;
+            Debug.Log("I have entered this zone");
         }
     }
 
@@ -21,6 +23,7 @@ public class TargetAcquired : MonoBehaviour
     {
         mainCamera.transform.parent = null;
         mainCamera.transform.LookAt(null);
-        (player.GetComponent("FollowCamera") as MonoBehaviour).enabled = true;
+        cameraObj.GetComponent<FollowCamera>().CameraTarget = player;
+        Debug.Log("I have exited this zone");
     }
 }
