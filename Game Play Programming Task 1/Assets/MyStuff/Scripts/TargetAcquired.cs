@@ -5,25 +5,37 @@ using UnityEngine;
 public class TargetAcquired : MonoBehaviour
 {
     public Camera mainCamera;
-    public Transform player;
     public GameObject cameraObj;
+    public Transform player;
     public Transform target;
+    public Transform cameraPos;
+
+    public bool active = false;
+
+    private void Update()
+    {
+        if (active)
+        {
+            mainCamera.transform.LookAt(target);
+            cameraObj.transform.position = cameraPos.position;
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Target")
         {
-            mainCamera.transform.parent = player.transform;
-            mainCamera.transform.LookAt(target);
-            cameraObj.GetComponent<FollowCamera>().CameraTarget = target;
+            target = other.GetComponent<CapsuleCollider>().transform;
+            active = true;
+            mainCamera.GetComponent<FollowCamera>().enabled = false;
             Debug.Log("I have entered this zone");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        mainCamera.transform.parent = null;
+        active = false;
         mainCamera.transform.LookAt(null);
-        cameraObj.GetComponent<FollowCamera>().CameraTarget = player;
+        mainCamera.GetComponent<FollowCamera>().enabled = true;
         Debug.Log("I have exited this zone");
     }
 }

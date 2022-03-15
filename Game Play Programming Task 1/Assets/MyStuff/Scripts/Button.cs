@@ -76,7 +76,7 @@ public class Button : MonoBehaviour
 
     async Task MoveDoorAsync(Vector3 goalPos)
     {
-        await Task.Delay(100);
+        await Task.Delay(750);
         float dist = Vector3.Distance(door.transform.position, goalPos);
 
         if (dist > 0.0001f)
@@ -87,6 +87,7 @@ public class Button : MonoBehaviour
 
     async Task MoveButton(Vector3 goalPos, Vector3 startPos)
     {
+        await Task.Delay(250);
         float dist = Vector3.Distance(button.transform.position, goalPos);
 
         if (dist > 0.0001f)
