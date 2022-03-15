@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SpeedBoost
   - DoubleJump
+  - Target
   layers:
   - Default
   - TransparentFX

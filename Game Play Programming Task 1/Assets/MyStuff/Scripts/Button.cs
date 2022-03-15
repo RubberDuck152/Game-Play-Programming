@@ -9,9 +9,11 @@ public class Button : MonoBehaviour
 {
     public bool active = false;
     public bool canPress = false;
+    public bool canAction = true;
 
     public GameObject button;
     public GameObject door;
+    public GameObject player;
 
     public Material red;
     public Material green;
@@ -37,20 +39,23 @@ public class Button : MonoBehaviour
         {
             if (Input.GetButtonDown("Main Attack"))
             {
-                CameraMovementAsync();
-                active = !active;
+                if (canAction)
+                {
+                    CameraMovementAsync();
+                    MoveButton(buttonPos2, buttonPos1);
+                    active = !active;
+                    canAction = false;
+                }
             }
         }
 
         if (active)
         {
-            MoveButton(buttonPos1);
             button.GetComponent<MeshRenderer>().material = green;
             MoveDoorAsync(position1);
         }
         else if (!active)
         {
-            MoveButton(buttonPos2);
             button.GetComponent<MeshRenderer>().material = red;
             MoveDoorAsync(position2);
         }
@@ -80,7 +85,7 @@ public class Button : MonoBehaviour
         }
     }
 
-    void MoveButton(Vector3 goalPos)
+    async Task MoveButton(Vector3 goalPos, Vector3 startPos)
     {
         float dist = Vector3.Distance(button.transform.position, goalPos);
 
@@ -88,17 +93,29 @@ public class Button : MonoBehaviour
         {
             button.transform.position = Vector3.Lerp(button.transform.position, goalPos, buttonMoveSpeed * Time.deltaTime);
         }
+
+        await Task.Delay(250);
+
+        float newDist = Vector3.Distance(button.transform.position, startPos);
+
+        if (newDist > 0.0001f)
+        {
+            button.transform.position = Vector3.Lerp(button.transform.position, startPos, buttonMoveSpeed * Time.deltaTime);
+        }
     }
 
     async Task CameraMovementAsync()
     {
+        player.GetComponent<CharacterMovement>().enabled = false;
         playerCamera.enabled = false;
         buttonCamera.enabled = true;
         Debug.Log("Start");
         await Task.Delay(3000);
 
         Debug.Log("I have delayed for 4 seconds");
+        player.GetComponent<CharacterMovement>().enabled = true;
         playerCamera.enabled = true;
         buttonCamera.enabled = false;
+        canAction = true;
     }
 }
