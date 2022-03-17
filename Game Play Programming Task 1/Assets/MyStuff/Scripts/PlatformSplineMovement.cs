@@ -9,6 +9,7 @@ public class PlatformSplineMovement : MonoBehaviour
     [SerializeField] private Transform pointC;
     [SerializeField] private Transform pointD;
     [SerializeField] private Transform Platform;
+    public GameObject PlayerObject;
     private float interpolateAmount;
 
     private void Update()
@@ -25,11 +26,19 @@ public class PlatformSplineMovement : MonoBehaviour
         return Vector3.Slerp(ab, bc, interpolateAmount);
     }
 
-    private Vector3 CubicLerp(Vector3 a, Vector3 b, Vector3 c, Vector3 D, float t)
+    private Vector3 CubicLerp(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
     {
         Vector3 ab_bc = QuadraticLerp(a, b, c, t);
-        Vector3 bc_cd = QuadraticLerp(b, c, D, t);
+        Vector3 bc_cd = QuadraticLerp(b, c, d, t);
 
         return Vector3.Slerp(ab_bc, bc_cd, interpolateAmount);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            PlayerObject.transform.parent = Platform.transform;
+        }
     }
 }
