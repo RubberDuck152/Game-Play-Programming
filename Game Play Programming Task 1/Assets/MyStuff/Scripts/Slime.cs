@@ -14,13 +14,12 @@ public class Slime : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if (spotted == true)
         {
             Vector3 targetDirection = player.transform.position - transform.position;
-            float singleStep = speed * Time.deltaTime;
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, speed * Time.deltaTime, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDirection);
         }
     }
@@ -33,8 +32,8 @@ public class Slime : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        spotted = false;
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+        //spotted = false;
+    //}
 }
