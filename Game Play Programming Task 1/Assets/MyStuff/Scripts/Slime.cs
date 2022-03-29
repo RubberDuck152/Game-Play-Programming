@@ -22,7 +22,6 @@ public class Slime : MonoBehaviour
             float singleStep = speed * Time.deltaTime;
             Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDirection);
-            Debug.Log("Rotating Slime");
         }
     }
 

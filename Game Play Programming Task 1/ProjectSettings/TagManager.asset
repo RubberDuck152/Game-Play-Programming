@@ -8,7 +8,7 @@ TagManager:
   - DoubleJump
   - Target
   - Collide
-  - Flip_Spline
+  - Platform
   layers:
   - Default
   - TransparentFX
