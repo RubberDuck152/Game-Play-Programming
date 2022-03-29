@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class ParentingToPlatform : MonoBehaviour
 {
-    public Transform PlayerObject;
-    public CharacterController controller;
-    public CharacterMovement movement;
+    public GameObject PlayerObject;
+    public CharacterController Controller;
+    public GameObject platform;
     public Camera playerCam;
     public Camera splineCam;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Platform")
         {
-            PlayerObject.parent = transform;
+            Debug.Log("I have entered the platform");
+            PlayerObject.transform.SetParent(platform.transform, true);
+            //Controller.enabled = false;
             playerCam.enabled = false;
             splineCam.enabled = true;
         }
@@ -22,7 +24,9 @@ public class ParentingToPlatform : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerObject.transform.parent = null;
+        Debug.Log("I have left the platform");
+        PlayerObject.transform.SetParent(null);
+        //Controller.enabled = true;
         playerCam.enabled = true;
         splineCam.enabled = false;
     }
