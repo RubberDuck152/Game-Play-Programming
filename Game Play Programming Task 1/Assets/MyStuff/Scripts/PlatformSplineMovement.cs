@@ -40,8 +40,6 @@ public class PlatformSplineMovement : MonoBehaviour
     }
     private void Update()
     {
-        
-
         if ((interpolateAmount >= upperB && !towards) || (interpolateAmount <= lowerB && towards))
         {
             towards = !towards;

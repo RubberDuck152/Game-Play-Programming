@@ -7,6 +7,8 @@ TagManager:
   - SpeedBoost
   - DoubleJump
   - Target
+  - Collide
+  - Flip_Spline
   layers:
   - Default
   - TransparentFX
