@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Slime : MonoBehaviour
@@ -16,11 +18,8 @@ public class Slime : MonoBehaviour
     public int counter;
     public int count;
     public Slime a_SlimePrefab;
+    public bool canBeHit = true;
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     private void Update()
     {
@@ -105,9 +104,27 @@ public class Slime : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Weapon")
+        if (canBeHit == false)
         {
-            maxHP = maxHP - 4;
+            Task.Delay(1000);
+            canBeHit = true;
+        }
+        else
+        {
+            if (collision.collider.tag == "Weapon")
+            {
+                maxHP = maxHP - 1;
+                canBeHit = false;
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (canBeHit == false)
+        {
+            Task.Delay(1000);
+            canBeHit = true;
         }
     }
 }

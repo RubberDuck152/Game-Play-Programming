@@ -137,6 +137,7 @@ public class CharacterMovement : MonoBehaviour
             if (Input.GetButtonDown("Main Attack"))
             {
                 anim?.SetBool(hash.attack1Bool, true);
+                
             }
             else
             {
