@@ -26,7 +26,6 @@ public class Slime : MonoBehaviour
     {
         if (spotted == true)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
             float step = movementSpeed * Time.deltaTime;
             if (move)
             {
@@ -42,7 +41,7 @@ public class Slime : MonoBehaviour
             }
         }
 
-        if (maxHP == 0)
+        if (maxHP <= 0)
         {
             if (counter != count)
             {
