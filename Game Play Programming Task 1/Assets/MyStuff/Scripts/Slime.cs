@@ -44,17 +44,17 @@ public class Slime : MonoBehaviour
         {
             if (counter != count)
             {
-                count++;
-
                 slime1 = Instantiate(a_SlimePrefab);
                 var newPos = transform.position + transform.right * 2;
                 slime1.Init(newPos);
                 slime1.player = player;
+                slime1.count++;
 
                 slime2 = Instantiate(a_SlimePrefab);
                 newPos = transform.position - transform.right * 2;
                 slime2.Init(newPos);
                 slime2.player = player;
+                slime2.count++;
             }
             Destroy(gameObject);
         }
