@@ -564,7 +564,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spotted: 0
   player: {fileID: 1466443717}
-  speed: 6
+  rotationSpeed: 1
+  movementSpeed: 2
+  move: 0
+  stoppingDistance: 3
+  maxHP: 16
+  slime1: {fileID: 0}
+  slime2: {fileID: 0}
+  counter: 2
+  count: 0
+  a_SlimePrefab: {fileID: 2786969892360947208, guid: 0303222943966e342afd63d1b9ba86e4, type: 3}
+  canBeHit: 1
 --- !u!135 &165284761
 SphereCollider:
   m_ObjectHideFlags: 0

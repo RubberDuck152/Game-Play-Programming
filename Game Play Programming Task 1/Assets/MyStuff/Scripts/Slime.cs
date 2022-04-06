@@ -49,10 +49,12 @@ public class Slime : MonoBehaviour
                 slime1 = Instantiate(a_SlimePrefab);
                 var newPos = transform.position + transform.right * 2;
                 slime1.Init(newPos);
+                slime1.player = player;
 
                 slime2 = Instantiate(a_SlimePrefab);
                 newPos = transform.position - transform.right * 2;
                 slime2.Init(newPos);
+                slime2.player = player;
             }
             Destroy(gameObject);
         }
@@ -64,7 +66,7 @@ public class Slime : MonoBehaviour
         maxHP = 16;
         transform.rotation = Quaternion.Euler(0,0,0);
         transform.position = position;
-
+        transform.localScale = gameObject.transform.localScale / 2;
     }
 
     // Update is called once per frame
