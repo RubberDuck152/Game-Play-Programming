@@ -13,7 +13,7 @@ public class CharacterMovement : MonoBehaviour
 
     public Transform cam;
 
-    private Animator anim;
+    public Animator anim;
     private Hashing hash;
 
     public bool armed = false;

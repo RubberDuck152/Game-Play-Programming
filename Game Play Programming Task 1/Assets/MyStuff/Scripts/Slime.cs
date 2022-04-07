@@ -18,7 +18,8 @@ public class Slime : MonoBehaviour
     public int counter;
     public int count;
     public Slime a_SlimePrefab;
-    public bool canBeHit = true;
+    public bool attacked = false;
+    int timer = 0;
     // Start is called before the first frame update
 
     private void Update()
@@ -57,6 +58,19 @@ public class Slime : MonoBehaviour
                 slime2.count++;
             }
             Destroy(gameObject);
+        }
+
+        if (Vector3.Distance(transform.position, player.transform.position) <= (stoppingDistance + 2))
+        {
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().anim.GetCurrentAnimatorStateInfo(0).IsName("Armed-Attack-1"))
+            {
+                if (timer == 0)
+                {
+                    maxHP = maxHP - 4;
+                    timer = 1;
+                    StartCoroutine(TimeDelay(1));
+                }
+            }
         }
     }
 
@@ -104,29 +118,9 @@ public class Slime : MonoBehaviour
         move = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    IEnumerator TimeDelay(float seconds)
     {
-        if (canBeHit == false)
-        {
-            Task.Delay(1000);
-            canBeHit = true;
-        }
-        else
-        {
-            if (collision.collider.tag == "Weapon")
-            {
-                maxHP = maxHP - 1;
-                canBeHit = false;
-            }
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (canBeHit == false)
-        {
-            Task.Delay(1000);
-            canBeHit = true;
-        }
+        yield return new WaitForSeconds(seconds);
+        timer = 0;
     }
 }
