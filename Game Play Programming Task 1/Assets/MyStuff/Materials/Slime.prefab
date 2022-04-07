@@ -321,18 +321,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48bc335db06151046a6b85888df7e7cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spotted: 0
   player: {fileID: 0}
-  rotationSpeed: 1
-  movementSpeed: 2
-  move: 0
-  stoppingDistance: 3
-  maxHP: 16
   slime1: {fileID: 0}
   slime2: {fileID: 0}
+  a_SlimePrefab: {fileID: 6508042305119795210}
+  rotationSpeed: 1
+  movementSpeed: 2
+  stoppingDistance: 3
+  attackDistance: 3
   counter: 2
   count: 0
-  a_SlimePrefab: {fileID: 6508042305119795210}
+  maxHP: 16
+  move: 0
+  spotted: 0
   attacked: 0
   knockback: 0
   red: {fileID: 2100000, guid: b5c307818e94fd54c83ba0a149c29178, type: 2}

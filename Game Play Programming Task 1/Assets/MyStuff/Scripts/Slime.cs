@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Slime : MonoBehaviour
 {
-    
     public GameObject player;
     public Slime slime1;
     public Slime slime2;
@@ -14,6 +13,7 @@ public class Slime : MonoBehaviour
     public float rotationSpeed;
     public float movementSpeed;
     public float stoppingDistance;
+    public float attackDistance;
     public int counter;
     public int count;
     public int maxHP;
@@ -31,10 +31,14 @@ public class Slime : MonoBehaviour
     private bool isRotatingRight = false;
     private bool isWalking = false;
     private bool isWandering = false;
+    public bool attackCooldown = false;
+
+    public int playerHP;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Enemy Target");
+        playerHP = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP;
     }
 
     private void Update()
@@ -49,6 +53,11 @@ public class Slime : MonoBehaviour
             if (Vector3.Distance(transform.position, player.transform.position) <= stoppingDistance)
             {
                 move = false;
+                if (attackCooldown == false)
+                {
+                    attackCooldown = true;
+                    StartCoroutine(Attack());
+                }
             }
             else
             {
@@ -115,7 +124,7 @@ public class Slime : MonoBehaviour
                 }
             }
         }
-
+        
         if (knockback == true)
         {
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x),
@@ -209,5 +218,31 @@ public class Slime : MonoBehaviour
         }
 
         isWandering = false;
+    }
+
+    IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(1);
+
+        stoppingDistance = 0;
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 6 * Time.deltaTime);
+
+        playerHP = playerHP - 4;
+        Debug.Log("HP decreased for Player");
+
+        yield return new WaitForSeconds(0.25f);
+
+        gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x),
+                2.0f, (transform.position.z - player.transform.position.z)).normalized / 2, ForceMode.Impulse);
+
+        stoppingDistance = attackDistance;
+
+        StartCoroutine(Cooldown());
+    }
+
+    IEnumerator Cooldown()
+    {
+        yield return new WaitForSeconds(3);
+        attackCooldown = false;
     }
 }
