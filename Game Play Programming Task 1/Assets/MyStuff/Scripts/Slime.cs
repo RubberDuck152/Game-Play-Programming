@@ -33,16 +33,18 @@ public class Slime : MonoBehaviour
     private bool isWandering = false;
     public bool attackCooldown = false;
 
-    public int playerHP;
-
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Enemy Target");
-        playerHP = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP;
     }
 
     private void Update()
     {
+        if (GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP <= 0)
+        {
+            spotted = false;
+        }
+
         if (spotted == true)
         {
             float step = movementSpeed * Time.deltaTime;
@@ -226,14 +228,15 @@ public class Slime : MonoBehaviour
 
         stoppingDistance = 0;
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 6 * Time.deltaTime);
+        gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0f, 2.0f, 0f));
 
-        playerHP = playerHP - 4;
+        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP - 4;
         Debug.Log("HP decreased for Player");
 
         yield return new WaitForSeconds(0.25f);
 
         gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x),
-                2.0f, (transform.position.z - player.transform.position.z)).normalized / 2, ForceMode.Impulse);
+                4.0f, (transform.position.z - player.transform.position.z)).normalized / 2, ForceMode.Impulse);
 
         stoppingDistance = attackDistance;
 

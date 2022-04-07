@@ -149,6 +149,12 @@ public class CharacterMovement : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
         // Maintains the velocity whilst jumping however unable to change direction
         controller.Move(movementVector);
+
+        if (PlayerHP <= 0)
+        {
+            anim?.SetBool(hash.deathBool, true);
+            StartCoroutine(Respawn());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -164,5 +170,12 @@ public class CharacterMovement : MonoBehaviour
             jumpParticle.SetActive(true);
             canDoubleJump = true;
         }
+    }
+
+    IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(5);
+        PlayerHP = 20;
+        anim?.SetBool(hash.deathBool, false);
     }
 }

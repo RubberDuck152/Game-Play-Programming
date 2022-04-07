@@ -12,6 +12,7 @@ public class Hashing : MonoBehaviour
     public int armedBool;
     public int attack1Bool;
     public int rollBool;
+    public int deathBool;
 
     private void Awake()
     {
@@ -23,5 +24,6 @@ public class Hashing : MonoBehaviour
         armedBool = Animator.StringToHash("Armed");
         attack1Bool = Animator.StringToHash("Attack-1");
         rollBool = Animator.StringToHash("Roll");
+        deathBool = Animator.StringToHash("Death");
     }
 }
