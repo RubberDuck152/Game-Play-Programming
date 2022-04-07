@@ -17,6 +17,7 @@ public class Slime : MonoBehaviour
     public int counter;
     public int count;
     public int maxHP;
+    public int slimeDMG;
 
     public bool move = false;
     public bool spotted = false;
@@ -31,7 +32,7 @@ public class Slime : MonoBehaviour
     private bool isRotatingRight = false;
     private bool isWalking = false;
     private bool isWandering = false;
-    public bool attackCooldown = false;
+    private bool attackCooldown = false;
 
     private void Start()
     {
@@ -52,6 +53,7 @@ public class Slime : MonoBehaviour
             {
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, step);
             }
+
             if (Vector3.Distance(transform.position, player.transform.position) <= stoppingDistance)
             {
                 move = false;
@@ -99,6 +101,7 @@ public class Slime : MonoBehaviour
                 slime1.Init(newPos, newRot);
                 slime1.player = player;
                 slime1.count++;
+                slime1.slimeDMG = slimeDMG / 2;
                 slime1.GetComponent<SphereCollider>().radius = gameObject.GetComponent<SphereCollider>().radius * 2;
 
                 slime2 = Instantiate(a_SlimePrefab);
@@ -107,6 +110,7 @@ public class Slime : MonoBehaviour
                 slime2.Init(newPos, newRot);
                 slime2.player = player;
                 slime2.count++;
+                slime2.slimeDMG = slimeDMG / 2;
                 slime2.GetComponent<SphereCollider>().radius = gameObject.GetComponent<SphereCollider>().radius * 2;
             }
             Destroy(gameObject);
@@ -224,21 +228,40 @@ public class Slime : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSeconds(1);
+        gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(
+            gameObject.transform.GetChild(0).gameObject.transform.localScale.x,
+            gameObject.transform.GetChild(0).gameObject.transform.localScale.y * 0.5f, 
+            gameObject.transform.GetChild(0).gameObject.transform.localScale.z);
 
+        gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(
+            gameObject.transform.GetChild(1).gameObject.transform.localScale.x,
+            gameObject.transform.GetChild(1).gameObject.transform.localScale.y * 0.5f,
+            gameObject.transform.GetChild(1).gameObject.transform.localScale.z);
+
+        yield return new WaitForSeconds(0.1f);
         stoppingDistance = 0;
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 6 * Time.deltaTime);
         gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0f, 2.0f, 0f));
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP - 4;
+        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterMovement>().PlayerHP - slimeDMG;
         Debug.Log("HP decreased for Player");
 
         yield return new WaitForSeconds(0.25f);
 
-        gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x),
-                4.0f, (transform.position.z - player.transform.position.z)).normalized / 2, ForceMode.Impulse);
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, -6 * Time.deltaTime);
+
+        gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(
+            gameObject.transform.GetChild(0).gameObject.transform.localScale.x,
+            gameObject.transform.GetChild(0).gameObject.transform.localScale.y * 2.0f,
+            gameObject.transform.GetChild(0).gameObject.transform.localScale.z);
+
+        gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(
+            gameObject.transform.GetChild(1).gameObject.transform.localScale.x,
+            gameObject.transform.GetChild(1).gameObject.transform.localScale.y * 2.0f,
+            gameObject.transform.GetChild(1).gameObject.transform.localScale.z);
 
         stoppingDistance = attackDistance;
+        yield return new WaitForSeconds(0.25f);
 
         StartCoroutine(Cooldown());
     }
