@@ -335,6 +335,8 @@ MonoBehaviour:
   a_SlimePrefab: {fileID: 6508042305119795210}
   attacked: 0
   knockback: 0
+  red: {fileID: 2100000, guid: b5c307818e94fd54c83ba0a149c29178, type: 2}
+  green: {fileID: 2100000, guid: d25326f00a72ffb4e9a1bdba555fac8d, type: 2}
 --- !u!54 &6508042305119795208
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -343,9 +345,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6508042305119795201}
   serializedVersion: 2
-  m_Mass: 20
-  m_Drag: 0
-  m_AngularDrag: 0
+  m_Mass: 7.5
+  m_Drag: 3
+  m_AngularDrag: 0.7
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0

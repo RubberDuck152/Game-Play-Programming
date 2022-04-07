@@ -21,8 +21,18 @@ public class Slime : MonoBehaviour
     public bool attacked = false;
     int timer = 0;
     public bool knockback = false;
-    float impulseForce = 10.0f;
-    // Start is called before the first frame update
+    public Material red;
+    public Material green;
+
+    private bool isRotatingLeft = false;
+    private bool isRotatingRight = false;
+    private bool isWalking = false;
+    private bool isWandering = false;
+
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Enemy Target");
+    }
 
     private void Update()
     {
@@ -42,6 +52,28 @@ public class Slime : MonoBehaviour
                 move = true;
             }
         }
+        else
+        {
+            if (isWandering == false)
+            {
+                StartCoroutine(Roaming());
+            }
+
+            if (isRotatingRight == true)
+            {
+                transform.Rotate(transform.up * Time.deltaTime * rotationSpeed * 50.0f);
+            }
+
+            if (isRotatingLeft == true)
+            {
+                transform.Rotate(transform.up * Time.deltaTime * -rotationSpeed * 50.0f);
+            }
+
+            if (isWalking == true)
+            {
+                gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * movementSpeed * 25.0f);
+            }
+        }       
 
         if (maxHP <= 0)
         {
@@ -52,12 +84,14 @@ public class Slime : MonoBehaviour
                 slime1.Init(newPos);
                 slime1.player = player;
                 slime1.count++;
+                slime1.GetComponent<SphereCollider>().radius = gameObject.GetComponent<SphereCollider>().radius * 2;
 
                 slime2 = Instantiate(a_SlimePrefab);
                 newPos = transform.position - transform.right * 2;
                 slime2.Init(newPos);
                 slime2.player = player;
                 slime2.count++;
+                slime2.GetComponent<SphereCollider>().radius = gameObject.GetComponent<SphereCollider>().radius * 2;
             }
             Destroy(gameObject);
         }
@@ -71,6 +105,7 @@ public class Slime : MonoBehaviour
                     maxHP = maxHP - 4;
                     knockback = true;
                     timer = 1;
+                    GetComponent<MeshRenderer>().material = red;
                     StartCoroutine(TimeDelay(1));
                 }
             }
@@ -78,8 +113,8 @@ public class Slime : MonoBehaviour
 
         if (knockback == true)
         {
-            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x) / 4,
-                2.0f, (transform.position.z - player.transform.position.z) / 4).normalized, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x),
+                2.0f, (transform.position.z - player.transform.position.z)).normalized, ForceMode.Impulse);
         }
     }
 
@@ -92,7 +127,6 @@ public class Slime : MonoBehaviour
         transform.localScale = gameObject.transform.localScale / 2;
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
         if (spotted == true)
@@ -132,5 +166,43 @@ public class Slime : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         timer = 0;
         knockback = false;
+        GetComponent<MeshRenderer>().material = green;
+    }
+
+    IEnumerator Roaming()
+    {
+        int RotationTime = Random.Range(1, 3);
+        int RotateWait = Random.Range(1, 3);
+        int RotateDirection = Random.Range(1, 2);
+        int WalkWait = Random.Range(1, 3);
+        int WalkTime = Random.Range(1, 3);
+
+        isWandering = true;
+
+        yield return new WaitForSeconds(WalkWait);
+
+        isWalking = true;
+
+        yield return new WaitForSeconds(WalkTime);
+
+        isWalking = false;
+
+        yield return new WaitForSeconds(RotateWait);
+
+        if(RotateDirection == 1)
+        {
+            isRotatingLeft = true;
+            yield return new WaitForSeconds(RotationTime);
+            isRotatingLeft = false;
+        }
+        
+        if (RotateDirection == 2)
+        {
+            isRotatingRight = true;
+            yield return new WaitForSeconds(RotationTime);
+            isRotatingRight = false;
+        }
+
+        isWandering = false;
     }
 }

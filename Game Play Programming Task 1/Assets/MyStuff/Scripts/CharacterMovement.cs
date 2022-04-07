@@ -25,9 +25,9 @@ public class CharacterMovement : MonoBehaviour
     public float turnSmoothTime = 0.1f;
     public float speedDampTime = 0.01f;
     public float jumpForce;
+    public int PlayerHP = 20;
 
     private float gravityValue = -9.81f;
-    private float timer = 0.0f;
 
     float turnSmoothVelocity;
 
