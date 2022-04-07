@@ -171,11 +171,11 @@ public class Slime : MonoBehaviour
 
     IEnumerator Roaming()
     {
-        int RotationTime = Random.Range(1, 3);
-        int RotateWait = Random.Range(1, 3);
+        int RotationTime = Random.Range(1, 4);
+        int RotateWait = Random.Range(1, 4);
         int RotateDirection = Random.Range(1, 2);
-        int WalkWait = Random.Range(1, 3);
-        int WalkTime = Random.Range(1, 3);
+        int WalkWait = Random.Range(1, 5);
+        int WalkTime = Random.Range(1, 4);
 
         isWandering = true;
 
