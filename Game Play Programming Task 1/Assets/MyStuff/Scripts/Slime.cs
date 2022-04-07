@@ -20,6 +20,8 @@ public class Slime : MonoBehaviour
     public Slime a_SlimePrefab;
     public bool attacked = false;
     int timer = 0;
+    public bool knockback = false;
+    float impulseForce = 10.0f;
     // Start is called before the first frame update
 
     private void Update()
@@ -67,10 +69,17 @@ public class Slime : MonoBehaviour
                 if (timer == 0)
                 {
                     maxHP = maxHP - 4;
+                    knockback = true;
                     timer = 1;
                     StartCoroutine(TimeDelay(1));
                 }
             }
+        }
+
+        if (knockback == true)
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3((transform.position.x - player.transform.position.x) / 4,
+                2.0f, (transform.position.z - player.transform.position.z) / 4).normalized, ForceMode.Impulse);
         }
     }
 
@@ -122,5 +131,6 @@ public class Slime : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         timer = 0;
+        knockback = false;
     }
 }
