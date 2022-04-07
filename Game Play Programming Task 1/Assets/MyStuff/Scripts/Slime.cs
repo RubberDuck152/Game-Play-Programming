@@ -6,21 +6,24 @@ using UnityEngine;
 
 public class Slime : MonoBehaviour
 {
-    public bool spotted = false;
+    
     public GameObject player;
-    public float rotationSpeed;
-    public float movementSpeed;
-    public bool move = false;
-    public float stoppingDistance;
-    public int maxHP;
     public Slime slime1;
     public Slime slime2;
+    public Slime a_SlimePrefab;
+    public float rotationSpeed;
+    public float movementSpeed;
+    public float stoppingDistance;
     public int counter;
     public int count;
-    public Slime a_SlimePrefab;
+    public int maxHP;
+
+    public bool move = false;
+    public bool spotted = false;
     public bool attacked = false;
-    int timer = 0;
     public bool knockback = false;
+    int timer = 0;
+    
     public Material red;
     public Material green;
 
@@ -81,14 +84,16 @@ public class Slime : MonoBehaviour
             {
                 slime1 = Instantiate(a_SlimePrefab);
                 var newPos = transform.position + transform.right * 2;
-                slime1.Init(newPos);
+                var newRot = transform.rotation;
+                slime1.Init(newPos, newRot);
                 slime1.player = player;
                 slime1.count++;
                 slime1.GetComponent<SphereCollider>().radius = gameObject.GetComponent<SphereCollider>().radius * 2;
 
                 slime2 = Instantiate(a_SlimePrefab);
                 newPos = transform.position - transform.right * 2;
-                slime2.Init(newPos);
+                newRot = transform.rotation;
+                slime2.Init(newPos, newRot);
                 slime2.player = player;
                 slime2.count++;
                 slime2.GetComponent<SphereCollider>().radius = gameObject.GetComponent<SphereCollider>().radius * 2;
@@ -118,11 +123,11 @@ public class Slime : MonoBehaviour
         }
     }
 
-    public void Init(Vector3 position)
+    public void Init(Vector3 position, Quaternion rotation)
     {
         enabled = true;
         maxHP = 16;
-        transform.rotation = Quaternion.Euler(0,0,0);
+        transform.rotation = rotation;
         transform.position = position;
         transform.localScale = gameObject.transform.localScale / 2;
     }
